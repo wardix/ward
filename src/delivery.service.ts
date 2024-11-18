@@ -76,7 +76,6 @@ export async function consumeMessages() {
             break
           default:
         }
-        sock[DEFAULT_SESSION].sendMessage(to, option)
 
         message.ack()
         backoffDelay = 1000
