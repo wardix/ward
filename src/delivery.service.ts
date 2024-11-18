@@ -79,6 +79,7 @@ export async function consumeMessages() {
 
         message.ack()
         backoffDelay = 1000
+        await new Promise((resolve) => setTimeout(resolve, backoffDelay))
       }
       if (!hasMessages) {
         await new Promise((resolve) => setTimeout(resolve, backoffDelay))
