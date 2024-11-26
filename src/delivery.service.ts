@@ -40,14 +40,14 @@ export async function consumeMessages() {
         let option: any = {}
         for (const header of message.headers!.keys()) {
           if (header == 'to') {
-            to = message.headers!.get(header)
+            to = atob(message.headers!.get(header))
             continue
           }
           if (header == 'body') {
-            body = message.headers!.get(header)
+            body = atob(message.headers!.get(header))
             continue
           }
-          option[header] = message.headers!.get(header)
+          option[header] = atob(message.headers!.get(header))
         }
 
         switch (body) {
