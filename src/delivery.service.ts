@@ -58,19 +58,19 @@ export async function consumeMessages() {
             break
           case 'image':
             sock[DEFAULT_SESSION].sendMessage(to, {
-              image: message.data,
+              image: Buffer.from(message.data),
               ...option,
             })
             break
           case 'video':
             sock[DEFAULT_SESSION].sendMessage(to, {
-              video: message.data,
+              video: Buffer.from(message.data),
               ...option,
             })
             break
           case 'document':
             sock[DEFAULT_SESSION].sendMessage(to, {
-              document: message.data,
+              document: Buffer.from(message.data),
               ...option,
             })
             break
