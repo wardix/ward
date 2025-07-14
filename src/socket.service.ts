@@ -1,9 +1,13 @@
 import {
+  DisconnectReason,
   fetchLatestBaileysVersion,
   makeWASocket,
+  proto,
   useMultiFileAuthState,
-} from '@whiskeysockets/baileys'
-import * as Boom from '@hapi/boom'
+} from 'baileys'
+import P from 'pino'
+import { type Boom } from '@hapi/boom'
+import QRCode from 'qrcode'
 import { v4 as uuidv4 } from 'uuid'
 import fs from 'fs/promises'
 import path from 'path'
@@ -28,45 +32,82 @@ export async function startSock(session: string) {
   sock[session] = makeWASocket({
     auth: state,
     version,
-    printQRInTerminal: true,
+    logger: P(),
   })
 
-  sock[session].ev.on('creds.update', saveCreds)
-
-  sock[session].ev.on('connection.update', async (update: any) => {
-    const { connection, lastDisconnect } = update
-    if (connection === 'close') {
-      sockReady[session] = false
-      if (Boom.boomify(lastDisconnect.error).output.statusCode == 401) {
-        await fs.rmdir(sessionPath, { recursive: true })
+  sock[session].ev.process(async (events: any) => {
+    if (events['connection.update']) {
+      const { connection, lastDisconnect, qr } = events['connection.update']
+      if (qr) {
+        console.log(await QRCode.toString(qr, { type: 'terminal' }))
+        return
       }
-      const shouldReconnect =
-        lastDisconnect && lastDisconnect.error
-          ? Boom.boomify(lastDisconnect.error).output.statusCode
-          : 500
-      console.log(
-        'Connection closed due to',
-        lastDisconnect?.error,
-        ', reconnecting in',
-        shouldReconnect,
-        'ms',
-      )
-      if (shouldReconnect) {
-        setTimeout(() => startSock(session), shouldReconnect)
+      if (connection === 'close') {
+        sockReady[session] = false
+        if (
+          (lastDisconnect?.error as Boom)?.output?.statusCode !==
+          DisconnectReason.loggedOut
+        ) {
+          startSock(session)
+        } else {
+          console.log('Connection closed. You are logged out.')
+          await fs.rmdir(sessionPath, { recursive: true })
+        }
+      } else if (connection == 'open') {
+        sockReady[session] = true
       }
-    } else if (connection === 'open') {
-      sockReady[session] = true
-      console.log('Opened connection')
+      return
     }
-  })
 
-  sock[session].ev.on('messages.upsert', async (m: any) => {
-    const uuid = uuidv4()
-    const timestamp = new Date().getTime()
-    const messageFilePath = path.join(
-      LOG_DIR,
-      `messages-${timestamp}-${uuid}.json`,
-    )
-    await fs.writeFile(messageFilePath, Buffer.from(JSON.stringify(m, null, 2)))
+    if (events['creds.update']) {
+      await saveCreds()
+      return
+    }
+
+    if (events['labels.association']) {
+      console.log(events['labels.association'])
+      return
+    }
+
+    if (events['labels.edit']) {
+      console.log(events['labels.edit'])
+      return
+    }
+
+    if (events.call) {
+      console.log('recv call event', events.call)
+      return
+    }
+
+    if (events['messaging-history.set']) {
+      const { chats, contacts, messages, isLatest, progress, syncType } =
+        events['messaging-history.set']
+      if (syncType === proto.HistorySync.HistorySyncType.ON_DEMAND) {
+        console.log(
+          [
+            `recv ${chats.length} chats`,
+            `${contacts.length} contacts`,
+            `${messages.length} msgs (is latest: ${isLatest}`,
+            `progress: ${progress}%)`,
+            `type: ${syncType}`,
+          ].join(', '),
+        )
+      }
+      return
+    }
+
+    if (events['messages.upsert']) {
+      const m = events['messages.upsert']
+      const uuid = uuidv4()
+      const timestamp = new Date().getTime()
+      const messageFilePath = path.join(
+        LOG_DIR,
+        `messages-${timestamp}-${uuid}.json`,
+      )
+      await fs.writeFile(
+        messageFilePath,
+        Buffer.from(JSON.stringify(m, null, 2)),
+      )
+    }
   })
 }
