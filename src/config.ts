@@ -13,3 +13,6 @@ export const MIN_BACKOFF_DELAY_SECONDS =
   process.env.MIN_BACKOFF_DELAY_SECONDS || 1
 export const MAX_BACKOFF_DELAY_SECONDS =
   process.env.MAX_BACKOFF_DELAY_SECONDS || 32
+export const JOB_ENQUEUE_API_URL = process.env.JOB_ENQUEUE_API_URL || ''
+export const JOB_ENQUEUE_API_KEY =
+  process.env.JOB_ENQUEUE_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
