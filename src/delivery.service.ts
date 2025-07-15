@@ -6,6 +6,8 @@ import {
   MIN_BACKOFF_DELAY_SECONDS,
   MAX_BACKOFF_DELAY_SECONDS,
   DEFAULT_SESSION,
+  NATS_STREAM,
+  NATS_CONSUMER,
 } from './config'
 
 export async function consumeMessages() {
@@ -23,7 +25,7 @@ export async function consumeMessages() {
 
   const jc = JSONCodec()
   const js = nc.jetstream()
-  const c = await js.consumers.get('JOBS', 'wa_delivery')
+  const c = await js.consumers.get(NATS_STREAM, NATS_CONSUMER)
 
   try {
     while (true) {
