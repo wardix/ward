@@ -1,4 +1,6 @@
-import { handleAsui, handlePing, handleSilence } from './commands'
+import { handleAsui } from './commands/asui'
+import { handlePing } from './commands/ping'
+import { handleSilence } from './commands/silence'
 
 export async function handleMessage(
   message: string,
