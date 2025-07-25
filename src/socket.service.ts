@@ -13,7 +13,7 @@ import fs from 'fs/promises'
 import path from 'path'
 
 import { DEFAULT_SESSION, LOG_DIR, SESSION_DIR } from './config'
-import { handleAsui, handlePing, handleSilence } from './commands'
+import { handleMessage } from './message'
 
 export const sock: any = { [DEFAULT_SESSION]: null }
 export const sockReady: any = { [DEFAULT_SESSION]: false }
@@ -129,18 +129,4 @@ export async function startSock(session: string) {
       )
     }
   })
-}
-
-async function handleMessage(message: string, jid: string, contact: string) {
-  if (message.toLowerCase().trim() === '!ping') {
-    await handlePing(jid)
-    return
-  }
-  if (message.toLowerCase().trim() === '!asui') {
-    await handleAsui(jid)
-    return
-  }
-  if (message.toLowerCase().trim().startsWith('!silence ')) {
-    await handleSilence(jid, message, contact)
-  }
 }
