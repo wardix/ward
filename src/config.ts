@@ -16,3 +16,6 @@ export const MAX_BACKOFF_DELAY_SECONDS =
 export const JOB_ENQUEUE_API_URL = process.env.JOB_ENQUEUE_API_URL || ''
 export const JOB_ENQUEUE_API_KEY =
   process.env.JOB_ENQUEUE_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+export const JOB_BROKER_API_URL = process.env.JOB_BROKER_API_URL || ''
+export const JOB_BROKER_API_KEY =
+  process.env.JOB_BROKER_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
