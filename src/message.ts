@@ -21,6 +21,10 @@ export async function handleMessage(
     await handleFsticketoverdue(jid)
     return
   }
+  if (message.toLowerCase().trim().startsWith('!fsticketoverdue ')) {
+    await handleFsticketoverdue(jid, message)
+    return
+  }
   if (message.toLowerCase().trim().startsWith('!fsticket ')) {
     await handleFsticket(jid, message)
     return
