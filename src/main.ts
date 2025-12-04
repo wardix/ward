@@ -1,9 +1,8 @@
 import { startSock } from './socket.service'
 import { consumeMessages } from './delivery.service'
+import { SESSION } from './config'
 
-import { DEFAULT_SESSION } from './config'
-
-startSock(DEFAULT_SESSION).catch((err) => console.log('Unexpected error:', err))
-consumeMessages().catch((error) => {
-  console.error('Error consuming messages:', error)
+startSock(SESSION).catch((err) => console.log('Unexpected error:', err))
+consumeMessages().catch((err: any) => {
+  console.error('Error consuming messages:', err)
 })

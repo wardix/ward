@@ -5,7 +5,7 @@ import {
   NATS_TOKEN,
   MIN_BACKOFF_DELAY_SECONDS,
   MAX_BACKOFF_DELAY_SECONDS,
-  DEFAULT_SESSION,
+  SESSION,
   NATS_STREAM,
   NATS_CONSUMER,
 } from './config'
@@ -33,7 +33,7 @@ export async function consumeMessages() {
       let hasMessages = false
       for await (const message of messages) {
         hasMessages = true
-        if (!sockReady[DEFAULT_SESSION]) {
+        if (!sockReady[SESSION]) {
           message.nak()
           continue
         }
@@ -54,24 +54,24 @@ export async function consumeMessages() {
 
         switch (body) {
           case 'text':
-            sock[DEFAULT_SESSION].sendMessage(to, {
+            sock[SESSION].sendMessage(to, {
               text: jc.decode(message.data),
             })
             break
           case 'image':
-            sock[DEFAULT_SESSION].sendMessage(to, {
+            sock[SESSION].sendMessage(to, {
               image: Buffer.from(message.data),
               ...option,
             })
             break
           case 'video':
-            sock[DEFAULT_SESSION].sendMessage(to, {
+            sock[SESSION].sendMessage(to, {
               video: Buffer.from(message.data),
               ...option,
             })
             break
           case 'document':
-            sock[DEFAULT_SESSION].sendMessage(to, {
+            sock[SESSION].sendMessage(to, {
               document: Buffer.from(message.data),
               ...option,
             })

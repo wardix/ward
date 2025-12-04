@@ -1,9 +1,9 @@
 import { sockReady, sock } from '../socket.service'
-import { DEFAULT_SESSION } from '../config'
+import { SESSION } from '../config'
 
 export async function handlePing(jid: string) {
-  if (!sockReady[DEFAULT_SESSION]) {
+  if (!sockReady[SESSION]) {
     return
   }
-  sock[DEFAULT_SESSION].sendMessage(jid, { text: 'pong' })
+  sock[SESSION].sendMessage(jid, { text: 'pong' })
 }
