@@ -3,15 +3,16 @@ import { sock, sockReady } from './socket.service'
 import {
   NATS_SERVERS,
   NATS_TOKEN,
-  MIN_BACKOFF_DELAY_SECONDS,
-  MAX_BACKOFF_DELAY_SECONDS,
+  MIN_BACKOFF_DELAY_MS,
+  MAX_BACKOFF_DELAY_MS,
   SESSION,
   NATS_STREAM,
   NATS_CONSUMER,
+  NATS_PULL_DELAY_MS,
 } from './config'
 
 export async function consumeMessages() {
-  let backoffDelay = Number(MIN_BACKOFF_DELAY_SECONDS) * 1000
+  let backoffDelay = MIN_BACKOFF_DELAY_MS
 
   const nc = await connect({
     servers: NATS_SERVERS,
@@ -29,10 +30,11 @@ export async function consumeMessages() {
 
   try {
     while (true) {
-      const messages = await c.fetch({ max_messages: 8, expires: 1000 })
+      const messages = await c.fetch({ max_messages: 1, expires: 1000 })
       let hasMessages = false
       for await (const message of messages) {
         hasMessages = true
+        backoffDelay = MIN_BACKOFF_DELAY_MS
         if (!sockReady[SESSION]) {
           message.nak()
           continue
@@ -80,15 +82,11 @@ export async function consumeMessages() {
         }
 
         message.ack()
-        backoffDelay = 1000
-        await new Promise((resolve) => setTimeout(resolve, backoffDelay))
+        await new Promise((resolve) => setTimeout(resolve, NATS_PULL_DELAY_MS))
       }
       if (!hasMessages) {
         await new Promise((resolve) => setTimeout(resolve, backoffDelay))
-        backoffDelay = Math.min(
-          backoffDelay * 2,
-          Number(MAX_BACKOFF_DELAY_SECONDS) * 1000,
-        )
+        backoffDelay = Math.min(backoffDelay * 2, MAX_BACKOFF_DELAY_MS)
       }
     }
   } catch (error) {
