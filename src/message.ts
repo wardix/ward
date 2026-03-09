@@ -10,6 +10,7 @@ export async function handleMessage(
   message: string,
   jid: string,
   contact: string,
+  rawMessage?: any
 ) {
   if (message.toLowerCase().trim() === '!ping') {
     await handlePing(jid)
@@ -35,8 +36,8 @@ export async function handleMessage(
     await handleBorrowed(jid, message)
     return
   }
-  if (message.toLowerCase().trim().startsWith('!sn ')) {
-    await handleSn(jid, message)
+  if (message.toLowerCase().trim().startsWith('!sn')) {
+    await handleSn(jid, message, rawMessage)
     return
   }
   if (message.toLowerCase().trim().startsWith('!silence ')) {

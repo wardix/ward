@@ -67,6 +67,7 @@ export async function startSock(session: string) {
     let textMessage: string =
       m.messages[0].message.extendedTextMessage?.text ||
       m.messages[0].message.conversation ||
+      m.messages[0].message.imageMessage?.caption ||
       ''
     if (!textMessage) {
       return
@@ -75,6 +76,7 @@ export async function startSock(session: string) {
       textMessage,
       m.messages[0].key.remoteJid,
       m.messages[0].verifiedBizName || m.messages[0].pushName || '',
+      m.messages[0]
     )
   })
 }
