@@ -4,6 +4,7 @@ import { handleSilence } from './commands/silence'
 import { handleFsticketoverdue } from './commands/fsticketoverdue'
 import { handleFsticket } from './commands/fsticket'
 import { handleBorrowed } from './commands/borrowed'
+import { handleSn } from './commands/sn'
 
 export async function handleMessage(
   message: string,
@@ -32,6 +33,10 @@ export async function handleMessage(
   }
   if (message.toLowerCase().trim().startsWith('!borrowed ')) {
     await handleBorrowed(jid, message)
+    return
+  }
+  if (message.toLowerCase().trim().startsWith('!sn ')) {
+    await handleSn(jid, message)
     return
   }
   if (message.toLowerCase().trim().startsWith('!silence ')) {
