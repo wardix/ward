@@ -5,6 +5,7 @@ import { handleFsticketoverdue } from './commands/fsticketoverdue'
 import { handleFsticket } from './commands/fsticket'
 import { handleBorrowed } from './commands/borrowed'
 import { handleSn } from './commands/sn'
+import { handleMac } from './commands/mac'
 
 export async function handleMessage(
   message: string,
@@ -38,6 +39,10 @@ export async function handleMessage(
   }
   if (message.toLowerCase().trim().startsWith('!sn')) {
     await handleSn(jid, message, rawMessage)
+    return
+  }
+  if (message.toLowerCase().trim().startsWith('!mac')) {
+    await handleMac(jid, message, rawMessage)
     return
   }
   if (message.toLowerCase().trim().startsWith('!silence ')) {
