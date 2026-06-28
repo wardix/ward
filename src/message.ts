@@ -6,6 +6,8 @@ import { handleFsticket } from './commands/fsticket'
 import { handleBorrowed } from './commands/borrowed'
 import { handleSn } from './commands/sn'
 import { handleMac } from './commands/mac'
+import { handleRemindFbstar } from './commands/remindfbstar'
+import { handleRemindIforte } from './commands/remindiforte'
 
 export async function handleMessage(
   message: string,
@@ -19,6 +21,14 @@ export async function handleMessage(
   }
   if (message.toLowerCase().trim() === '!asui') {
     await handleAsui(jid)
+    return
+  }
+  if (message.toLowerCase().trim() === '!remindfbstar') {
+    await handleRemindFbstar(jid)
+    return
+  }
+  if (message.toLowerCase().trim() === '!remindiforte') {
+    await handleRemindIforte(jid)
     return
   }
   if (message.toLowerCase().trim() === '!fsticketoverdue') {

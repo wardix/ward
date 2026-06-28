@@ -24,3 +24,6 @@ export const JOB_BROKER_API_KEY =
 export const NATS_PULL_DELAY_MS = Number(
   process.env.NATS_PULL_DELAY_MS || 16000,
 )
+export const NATS_BRIDGE_API_URL = process.env.NATS_BRIDGE_API_URL || ''
+export const NATS_BRIDGE_API_KEY =
+  process.env.NATS_BRIDGE_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
