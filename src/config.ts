@@ -27,3 +27,5 @@ export const NATS_PULL_DELAY_MS = Number(
 export const NATS_BRIDGE_API_URL = process.env.NATS_BRIDGE_API_URL || ''
 export const NATS_BRIDGE_API_KEY =
   process.env.NATS_BRIDGE_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+export const NATS_MONITOR_URL =
+  process.env.NATS_MONITOR_URL || 'http://localhost:8222'

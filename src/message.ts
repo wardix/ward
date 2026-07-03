@@ -8,6 +8,7 @@ import { handleSn } from './commands/sn'
 import { handleMac } from './commands/mac'
 import { handleRemindFbstar } from './commands/remindfbstar'
 import { handleRemindIforte } from './commands/remindiforte'
+import { handleQstat } from './commands/qstat'
 
 export async function handleMessage(
   message: string,
@@ -17,6 +18,10 @@ export async function handleMessage(
 ) {
   if (message.toLowerCase().trim() === '!ping') {
     await handlePing(jid)
+    return
+  }
+  if (message.toLowerCase().trim() === '!qstat') {
+    await handleQstat(jid)
     return
   }
   if (message.toLowerCase().trim() === '!asui') {
