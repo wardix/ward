@@ -29,3 +29,7 @@ export const NATS_BRIDGE_API_KEY =
   process.env.NATS_BRIDGE_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 export const NATS_MONITOR_URL =
   process.env.NATS_MONITOR_URL || 'http://localhost:8222'
+export const QENTRAL_API_URL =
+  process.env.QENTRAL_API_URL || 'http://localhost:3000/api/v1/jobs'
+export const QENTRAL_API_KEY =
+  process.env.QENTRAL_API_KEY || 'ganti-dengan-kunci-rahasia-anda'
