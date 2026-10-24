@@ -8,6 +8,7 @@ import { handleSn } from './commands/sn'
 import { handleMac } from './commands/mac'
 import { handleRemindFbstar } from './commands/remindfbstar'
 import { handleRemindIforte } from './commands/remindiforte'
+import { handleSummaryTiket } from './commands/summarytiket'
 import { handleQstat } from './commands/qstat'
 
 export async function handleMessage(
@@ -34,6 +35,15 @@ export async function handleMessage(
   }
   if (message.toLowerCase().trim() === '!remindiforte') {
     await handleRemindIforte(jid)
+    return
+  }
+  if (
+    message.toLowerCase().trim() === '!summarytiket' ||
+    message.toLowerCase().trim().startsWith('!summarytiket ') ||
+    message.toLowerCase().trim() === '!rekaptiket' ||
+    message.toLowerCase().trim().startsWith('!rekaptiket ')
+  ) {
+    await handleSummaryTiket(jid, message)
     return
   }
   if (message.toLowerCase().trim() === '!fsticketoverdue') {
