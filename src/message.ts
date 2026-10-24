@@ -40,6 +40,8 @@ export async function handleMessage(
   if (
     message.toLowerCase().trim() === '!summarytiket' ||
     message.toLowerCase().trim().startsWith('!summarytiket ') ||
+    message.toLowerCase().trim() === '!summaryticket' ||
+    message.toLowerCase().trim().startsWith('!summaryticket ') ||
     message.toLowerCase().trim() === '!rekaptiket' ||
     message.toLowerCase().trim().startsWith('!rekaptiket ')
   ) {
