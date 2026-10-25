@@ -9,6 +9,7 @@ import { handleMac } from './commands/mac'
 import { handleRemindFbstar } from './commands/remindfbstar'
 import { handleRemindIforte } from './commands/remindiforte'
 import { handleSummaryTiket } from './commands/summarytiket'
+import { handleBday } from './commands/bday'
 import { handleQstat } from './commands/qstat'
 
 export async function handleMessage(
@@ -46,6 +47,15 @@ export async function handleMessage(
     message.toLowerCase().trim().startsWith('!rekaptiket ')
   ) {
     await handleSummaryTiket(jid, message)
+    return
+  }
+  if (
+    message.toLowerCase().trim() === '!bday' ||
+    message.toLowerCase().trim().startsWith('!bday ') ||
+    message.toLowerCase().trim() === '!hbd' ||
+    message.toLowerCase().trim().startsWith('!hbd ')
+  ) {
+    await handleBday(jid, message)
     return
   }
   if (message.toLowerCase().trim() === '!fsticketoverdue') {
